@@ -13,6 +13,7 @@ import BulkErrorList from "./BulkErrorList";
 import "../styles/figma.ds.css";
 import "../styles/ui.css";
 import "../styles/empty-state.css";
+import "../styles/tds-copilot.css";
 import "react-tooltip/dist/react-tooltip.css";
 
 const App = ({}) => {
@@ -26,13 +27,7 @@ const App = ({}) => {
   const [selectedListItems, setSelectedListItem] = React.useState([]);
   const [activeNodeIds, setActiveNodeIds] = React.useState([]);
   const [borderRadiusValues, setBorderRadiusValues] = useState([
-    0,
-    2,
-    4,
-    8,
-    16,
-    24,
-    32
+    0, 2, 4, 6, 8, 10000 // Fluent UI border radius tokens
   ]);
   const [lintVectors, setLintVectors] = useState(false);
   const [initialLoad, setInitialLoad] = React.useState(false);

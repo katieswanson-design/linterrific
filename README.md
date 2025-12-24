@@ -1,200 +1,258 @@
-# Design Lint
+# TDS Co-Pilot
 
-![Design Lint Gif Example](https://github.com/destefanis/design-lint/blob/master/assets/lint-example.gif)
+**AI-Powered Design System Linter for Fluent UI**
 
+TDS Co-Pilot is an intelligent Figma plugin that ensures your designs comply with the Fluent design system (Teams Design System). It validates design tokens, suggests fixes using AI, and helps maintain consistency across your product designs.
 
-Find and fix errors in your designs with Design Lint, a plugin for Figma.
+## 🎯 Features
 
-[View Plugin Page](https://www.figma.com/c/plugin/801195587640428208)
+### Core Linting
+- **Border Radius Validation**: Ensures corner radii match Fluent tokens (2px, 4px, 6px, 8px, 10000px)
+- **Spacing Validation**: Checks padding and gap values against Fluent's spacing scale
+- **Stroke Width Validation**: Validates stroke weights (1px, 2px, 3px, 4px)
+- **Color Token Validation**: Ensures fills, strokes, and effects use proper styles
+- **Typography Validation**: Checks text styles for compliance
 
-Design Lint finds missing styles within your designs on all your layers. Ensure your designs are ready for development or design collaboration by fixing inconsistencies.
+### AI-Powered Suggestions
+- **Context-Aware Explanations**: AI analyzes errors and explains why they matter
+- **Smart Recommendations**: Suggests the closest valid Fluent token for non-compliant values
+- **Documentation Links**: Direct links to Fluent design system documentation
 
-While it's running, Design Lint will update automatically as you fix errors. Clicking on layer will also select that layer in your design. Navigating between each error is fast and much easier than trying to find errors on your own.
+### Design System Integration
+- **Fluent UI Tokens**: Pre-configured with Teams Light and Dark theme values
+- **Customizable**: Easy to update tokens for custom brand implementations
+- **Variable-Aware**: Respects Figma variables and skips already-tokenized layers
 
-## Features 
-* Selecting a layer with an error will also select the layer in Figma, letting you navigate your page and fix errors with full context.
-* Design Lint polls for changes and will update as you fix errors.
-* "Ignore" or "Ignore All" buttons let you skip special layers.
-* Use the "Select All" option to fix multiple errors at once that share the same value.
-* Need to skip layers like illustrations? Locked layers in Figma will be skipped from linting.
-* Custom border radius values can be set within settings and are stored in Client Storage.
+## 📦 Installation
 
-![Design Lint Ignore Example](https://github.com/destefanis/design-lint/blob/master/assets/ignore-example.gif)
+### Prerequisites
+- Node.js (v14 or higher)
+- Yarn or npm
+- Figma desktop app
 
-![Design Lint Selection Example](https://github.com/destefanis/design-lint/blob/master/assets/new-selection.gif)
+### Setup
 
-Because Design Lint doesn't try and manage your library, there's no logging in, accounts, or syncing. This open source plugin is designed to make fixing errors easy and let you get back to designing. Want to write specific rules for your own organization? Feel free to fork this repo and edit to your liking!
+1. **Clone and navigate to your local repo**:
+   ```bash
+   cd /path/to/linterrific
+   ```
 
-## Install from the Figma Plugin Page
-Although this plugin is open source, for most users you'll want to install from the Figma plugin community page.
-[View Plugin Page](https://www.figma.com/c/plugin/801195587640428208)
+2. **Install dependencies**:
+   ```bash
+   yarn install
+   # or
+   npm install
+   ```
 
-## To Run Locally use following commands
-* Run `yarn` to install dependencies.
-* Run `yarn build:watch` to start webpack in watch mode.
+3. **Copy the new TDS Co-Pilot files**:
+   
+   Copy these files into your `src/plugin/` directory:
+   - `fluentTokens.ts`
+   - `fluentLinting.ts`
+   - `controller.ts` (replace existing)
+   
+   Copy these files into your `src/app/` directory:
+   - `App.tsx` (replace existing)
+   
+   Copy these files into your `src/app/components/` directory:
+   - `AISuggestButton.tsx` (new component)
+   
+   Copy this file into your `src/app/styles/` directory:
+   - `tds-copilot.css`
 
-### To Edit it
-The react code, components, and UI can be found here [App.tsx](./src/app/components/App.tsx).  
-The Figma API, Storage, and Linting happens in [controller.ts](./src/plugin/controller.ts).
-Linting functions and rules can be found in [lintingFunctions.ts](./src/plugin/lintingFunctions.ts).
+4. **Update your App.tsx to import the AI component**:
+   
+   Add this import at the top of `src/app/components/Panel.tsx`:
+   ```typescript
+   import AISuggestButton from "./AISuggestButton";
+   ```
+   
+   Then add the AI button component to the Panel render, after the error details:
+   ```tsx
+   <AISuggestButton error={activeError} node={node} />
+   ```
 
-### How the Linting Works
-Different layers (referred to as Nodes in the Figma API) have different properties to lint. First we loop through the layers the user has selected. For each layer we determine that layers type.
+5. **Import the TDS Co-Pilot CSS**:
+   
+   Add this to `src/app/components/App.tsx`:
+   ```typescript
+   import "../styles/tds-copilot.css";
+   ```
 
-```javascript
-function determineType(node) {
-    switch (node.type) {
-      case "SLICE":
-      case "GROUP": {
-        // Groups styles apply to their children so we can skip this node type.
-        let errors = [];
-        return errors;
-      }
-      case "CIRCLE":
-      case "VECTOR":
-      case "STAR":
-      case "BOOLEAN_OPERATION":
-      case "SQUARE": {
-        return lintShapeRules(node);
-      }
-      case "FRAME": {
-        return lintFrameRules(node);
-      }
-      case "INSTANCE":
-      case "RECTANGLE": {
-        return lintRectangleRules(node);
-      }
-      case "COMPONENT": {
-        return lintComponentRules(node);
-      }
-      case "TEXT": {
-        return lintTextRules(node);
-      }
-      case "LINE": {
-        return lintLineRules(node);
-      }
-      default: {
-        // Do nothing
-      }
-    }
-  }
+6. **Build the plugin**:
+   ```bash
+   yarn build:watch
+   # or
+   npm run build:watch
+   ```
+
+7. **Load in Figma**:
+   - Open Figma Desktop
+   - Go to Menu > Plugins > Development > Import plugin from manifest
+   - Select the `manifest.json` file from your repo
+   - The plugin will appear as "TDS Co-Pilot"
+
+## 🚀 Usage
+
+### Basic Linting
+
+1. **Select layers** in your Figma file
+2. **Run TDS Co-Pilot** from the Plugins menu
+3. **Review errors** organized by layer or category
+4. **Click "Suggest Fix"** on any error to get AI-powered guidance
+
+### Understanding Errors
+
+#### Border Radius Errors
+- **What it means**: Layer uses a non-standard corner radius
+- **Example**: A button with 5px radius instead of Fluent's 4px or 6px
+- **Fix**: Click "Suggest Fix" to see the closest Fluent token
+
+#### Spacing Errors
+- **What it means**: Padding or gap doesn't match Fluent's spacing scale
+- **Example**: 15px gap instead of 12px or 16px
+- **Fix**: Apply the suggested spacing token for consistent layouts
+
+#### Stroke Width Errors
+- **What it means**: Border thickness doesn't match Fluent standards
+- **Example**: 1.5px stroke instead of 1px or 2px
+- **Fix**: Use strokeWidthThin (1px) or strokeWidthThick (2px)
+
+### AI Suggestions
+
+When you click **"Suggest Fix"**:
+1. TDS Co-Pilot analyzes the error context
+2. AI generates a human-friendly explanation
+3. Suggests the closest valid Fluent token
+4. Provides a link to relevant documentation
+
+## 🎨 Customizing Tokens
+
+### Updating Token Values
+
+Edit `src/plugin/fluentTokens.ts` to modify token values:
+
+```typescript
+export const teamsTokens: FluentTokens = {
+  borderRadius: {
+    none: 0,
+    small: 2,    // Change these values
+    medium: 4,   // to match your
+    large: 6,    // design system
+    xLarge: 8,
+    circular: 10000
+  },
+  // ... spacing and other tokens
+};
 ```
 
-Some of these node types have the same requirements so there are generic functions that call multiple linting functions which are imported from [lintingFunctions.ts](./src/plugin/lintingFunctions.ts).
+### Adding New Token Categories
 
-```javascript
-function lintTextRules(node) {
-    let errors = [];
+1. Add the token type to the `FluentTokens` interface
+2. Add values to `teamsTokens` object
+3. Create a `getValid[TokenType]Values()` function
+4. Create a check function in `fluentLinting.ts`
+5. Integrate into the linting rules in `controller.ts`
 
-    checkType(node, errors);
-    checkFills(node, errors);
-    checkEffects(node, errors);
-    checkStrokes(node, errors);
+## 📊 Case Study Integration
 
-    return errors;
-  }
+This plugin demonstrates **"Beyond Documentation: AI Managing Complexity at Scale"** by:
+
+1. **Automated Enforcement**: Replaces manual design QA with systematic checks
+2. **AI-Powered Guidance**: Transforms cryptic errors into educational moments
+3. **Scalable Knowledge**: Distributes design system expertise through AI
+4. **Continuous Compliance**: Catches issues before they reach development
+
+### Key Metrics
+- **Time Saved**: Reduces QA time from hours to minutes
+- **Consistency**: 100% automated token validation
+- **Education**: Every error becomes a learning opportunity
+- **Adoption**: Makes design system compliance effortless
+
+## 🛠️ Architecture
+
+```
+TDS Co-Pilot
+├── Plugin Layer (TypeScript)
+│   ├── fluentTokens.ts      # Token definitions & utilities
+│   ├── fluentLinting.ts     # Fluent-specific linting logic
+│   ├── controller.ts        # Main orchestration
+│   └── lintingFunctions.ts  # Base linting functions
+│
+├── UI Layer (React)
+│   ├── App.tsx              # Main app component
+│   ├── AISuggestButton.tsx  # AI suggestion interface
+│   └── [other components]   # Panel, NodeList, etc.
+│
+└── Styles
+    ├── tds-copilot.css      # TDS Co-Pilot branding
+    └── [other styles]       # Base UI styles
 ```
 
-So for instance, this function runs the linting rules for typography, fills, effects, and strokes on this layer since its a piece of text, and text layers have all those properties. Where as a Frame only lints for fills, effects, and strokes, as it can't have any type styles.
+## 🧪 Testing
 
-### What does Design Lint check for by default?
+### Manual Testing Checklist
 
-**Out of the box, Design Lint only checks for layers that are not using styles**. In Figma, best practice is to use styles (also referred to as design tokens) on all of your layers, so your type, colors, spacing etc are all consistent.
+- [ ] Border radius validation works for all standard values
+- [ ] AI suggestions appear when clicking "Suggest Fix"
+- [ ] Documentation links navigate to correct Fluent pages
+- [ ] Spacing validation catches non-standard padding/gaps
+- [ ] Stroke width validation works correctly
+- [ ] Plugin respects Figma variables (doesn't flag them as errors)
 
-That being said, Design Lint is ready for you to write custom rules for your team. For example, if you wanted to ensure that no text layers are using background specific colors, you could check for this, an example is provided below.
+### Sample Test Cases
 
-### Error Array
+1. **Border Radius**
+   - Create rectangle with 5px radius → Should suggest 4px or 6px
+   - Create rectangle with 4px radius → No error
 
-Design Lint references one array of all the errors returned by the lint rules. Each error in the array is an object. A given layer in Figma can have multiple errors, let's say it's missing both a text style and using an incorrect fill color, so we use that layers unique ID (set by Figma) to identify which errors belong to it.
+2. **Spacing**
+   - Create auto-layout with 15px gap → Should suggest 12px or 16px
+   - Create auto-layout with 16px gap → No error
 
-### Error Object
+3. **AI Suggestions**
+   - Click "Suggest Fix" on radius error → Should explain why and suggest token
+   - Click "See Documentation" → Should open Fluent docs
 
-When a linting function runs and finds an error, we return an error object. This object has the original nodes information, it's ID (which we use to select it), it's name, what kind of layer it is, etc. When writing a custom error, you can customize the messages it returns. Node and type (fill, text, effect, stroke, or radius) are required.
+## 📝 Notes for Portfolio/Case Study
 
-```javascript
-  return errors.push(
-    createErrorObject(
-      node, // Node object we use to reference the error (id, layer name, etc)
-      "fill", // Type of error (fill, text, effect, etc)
-      "Missing Text Style", // Large text to indicate what the error is.
-      "Multiple Styles" // Some linting functions use another function here to return a fill HEX value or a number.
-    )
-  );
-```
+### Presentation Talking Points
 
+1. **The Problem**: Design systems create hundreds of tokens. Designers struggle to remember and apply them consistently.
 
-### Writing Custom Rules
+2. **The Solution**: TDS Co-Pilot combines automated linting with AI-powered education to make compliance effortless.
 
-Until I have time to write a formal tutorial, I've added a [placeholder linting function with comments](https://github.com/destefanis/design-lint/blob/master/src/plugin/lintingFunctions.ts#L120) that will guide you through creating some basic custom rules for your design team.
+3. **The Innovation**: Rather than just flagging errors, the AI explains *why* rules exist and *how* to fix them.
 
-```javascript
-// Custom Lint rule that isn't being used yet!
-// that ensures our text fills aren't using styles (design tokens) meant for backgrounds.
-export function customCheckTextFills(node, errors) {
-  // Here we create an array of style keys (https://www.figma.com/plugin-docs/api/PaintStyle/#key)
-  // that we want to make sure our text layers aren't using.
+4. **The Impact**: Teams ship Fluent-compliant designs faster, with fewer QA cycles and better understanding of the system.
 
-  const fillsToCheck = [
-    "4b93d40f61be15e255e87948a715521c3ae957e6"
-    // To collect style keys, use a plugin like Inspector, or use console commands like figma.getLocalPaintStyles();
-    // in your design system file.
-  ];
+### Demo Flow
 
-  let nodeFillStyle = node.fillStyleId;
+1. Show a non-compliant design (mixed border radii, random spacing)
+2. Run TDS Co-Pilot to surface errors
+3. Click "Suggest Fix" to demonstrate AI explanations
+4. Show documentation links for deeper learning
+5. Apply fixes to achieve 100% compliance
 
-  // If there are multiple text styles on a single text layer, we can't lint it
-  // we can return an error instead. If this were a frame, rectangle, or other layer type, we could remove this check.
-  if (typeof nodeFillStyle === "symbol") {
-    return errors.push(
-      createErrorObject(
-        node, // Node object we use to reference the error (id, layer name, etc)
-        "fill", // Type of error (fill, text, effect, etc)
-        "Mixing two styles together", // Message we show to the user
-        "Multiple Styles" // Normally we return a hex value here
-      )
-    );
-  }
+## 🤝 Contributing
 
-  // We strip the additional style key characters so we can check
-  // to see if the fill is being used incorrectly.
-  nodeFillStyle = nodeFillStyle.replace("S:", "");
-  nodeFillStyle = nodeFillStyle.split(",")[0];
+This is a case study/portfolio project, but contributions are welcome:
 
-  // If the node (layer) has a fill style, then check to see if there's an error.
-  if (nodeFillStyle !== "") {
-    // If we find the layer has a fillStyle that matches in the array create an error.
-    if (fillsToCheck.includes(nodeFillStyle)) {
-      return errors.push(
-        createErrorObject(
-          node, // Node object we use to reference the error (id, layer name, etc)
-          "fill", // Type of error (fill, text, effect, etc)
-          "Incorrect text color use", // Message we show to the user
-          "Using a background color on a text layer" // Determines the fill, so we can show a hex value.
-        )
-      );
-    }
-    // If there is no fillStyle on this layer,
-    // check to see why with our default linting function for fills.
-  } else {
-    checkFills(node, errors);
-  }
-}
-```
+1. Fork the repo
+2. Create a feature branch
+3. Make your changes
+4. Submit a PR with description
 
-#### Import your function in controller.ts
-Once you've written some custom functions for checking specific rules, make sure to [import your function here](https://github.com/destefanis/design-lint/blob/master/src/plugin/controller.ts#L8) in the controller.ts file.
+## 📄 License
 
-Let's say we've written a custom rule for text layers, make sure to [change what functions run for text layers here](https://github.com/destefanis/design-lint/blob/master/src/plugin/controller.ts#L367) under the `lintTextRules` function.
+MIT License - Based on the original design-lint plugin
 
+## 🙏 Acknowledgments
 
-#### Changing the border radius default
+- Original design-lint plugin by [@destefanis](https://github.com/destefanis)
+- Fluent UI design system by Microsoft
+- Built with AI assistance from Claude (Anthropic)
 
-If you plan on using this app as a private plugin you'll likely want to change the default border radius values which are `[0, 2, 4, 8, 16, 24, 32]`. This can be acheived by changing these values in [App.tsx](./src/app/components/App.tsx#L23) and in [controller.ts](./src/plugin/controller.ts#L12). 
+---
 
-### Tooling
-This repo is using following:
-* [Figma Plugin React Template](https://github.com/nirsky/figma-plugin-react-template)
-* React + Webpack
-* TypeScript
-* TSLint
-* Prettier precommit hook
+**Built by Katie Swanson** | [Portfolio](https://katieswanson.design) | [LinkedIn](https://linkedin.com/in/yourprofile)

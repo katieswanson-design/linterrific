@@ -1,0 +1,210 @@
+/* TDS Co-Pilot - AI Suggestion Styling */
+
+.ai-suggest-container {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--neutral-stroke-subtle, #3d3d3d);
+}
+
+.ai-suggest-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #479ef5 0%, #62abf5 100%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+.ai-suggest-button:hover {
+  background: linear-gradient(135deg, #62abf5 0%, #96c6fa 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(71, 158, 245, 0.3);
+}
+
+.ai-suggest-button:active {
+  transform: translateY(0);
+}
+
+.ai-suggest-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ai-suggest-button svg {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1) rotate(180deg);
+  }
+}
+
+.ai-suggestion-box {
+  background: var(--neutral-background-2, #1f1f1f);
+  border: 1px solid var(--brand-stroke-1, #479ef5);
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 12px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-suggestion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ai-suggestion-title {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--neutral-foreground-1, #ffffff);
+}
+
+.close-suggestion {
+  background: none;
+  border: none;
+  color: var(--neutral-foreground-3, #adadad);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+}
+
+.close-suggestion:hover {
+  background: var(--subtle-background-hover, #383838);
+  color: var(--neutral-foreground-1, #ffffff);
+}
+
+.ai-suggestion-content {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--neutral-foreground-2, #d6d6d6);
+  margin-bottom: 10px;
+}
+
+.ai-suggestion-content strong {
+  color: var(--brand-foreground-1, #479ef5);
+  font-weight: 600;
+}
+
+.ai-suggestion-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.doc-link {
+  font-size: 11px;
+  color: var(--brand-foreground-1, #479ef5);
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s ease;
+}
+
+.doc-link:hover {
+  color: var(--brand-foreground-2, #62abf5);
+  text-decoration: underline;
+}
+
+/* TDS Co-Pilot Branding Updates */
+
+.brand-header {
+  background: linear-gradient(135deg, #115ea3 0%, #479ef5 100%);
+  padding: 12px 16px;
+  color: white;
+}
+
+.brand-logo {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.co-pilot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Fluent-inspired error badges */
+.error-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.error-badge.radius {
+  background: var(--status-warning-background-1, #4a1e04);
+  color: var(--status-warning-foreground-1, #faa06b);
+  border: 1px solid var(--status-warning-border-1, #f7630c);
+}
+
+.error-badge.spacing {
+  background: var(--palette-blue-background-1, #00213d);
+  color: var(--palette-blue-foreground-1, #5caae5);
+  border: 1px solid var(--palette-blue-border-1, #0078d4);
+}
+
+.error-badge.stroke {
+  background: var(--palette-purple-background-1, #341a51);
+  color: var(--palette-purple-foreground-1, #9470bd);
+  border: 1px solid var(--palette-purple-border-1, #8764b8);
+}
+
+.error-badge.fill,
+.error-badge.text,
+.error-badge.effect {
+  background: var(--status-danger-background-1, #3b0509);
+  color: var(--status-danger-foreground-1, #dc626d);
+  border: 1px solid var(--status-danger-border-1, #c50f1f);
+}

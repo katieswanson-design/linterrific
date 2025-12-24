@@ -10,6 +10,14 @@ import {
   // uncomment this as an example of a custom lint function ^
 } from "./lintingFunctions";
 
+import {
+  checkFluentRadius,
+  checkFluentSpacing,
+  checkFluentStrokeWidth
+} from "./fluentLinting";
+
+import { getValidBorderRadiusValues } from "./fluentTokens";
+
 import { fetchRemoteStyles, groupLibrary } from "./remoteStyleFunctions";
 
 const {
@@ -20,7 +28,7 @@ const {
 
 figma.showUI(__html__, { width: 360, height: 580 });
 
-let borderRadiusArray = [0, 2, 4, 8, 16, 24, 32];
+let borderRadiusArray = getValidBorderRadiusValues(); // Use Fluent UI tokens by default
 let originalNodeTree: readonly any[] = [];
 let lintVectors = false;
 let localStylesLibrary = {};
@@ -1503,7 +1511,10 @@ figma.ui.onmessage = msg => {
       usedRemoteStyles,
       colorVariables
     );
-    checkRadius(node, errors, borderRadiusArray);
+    
+    // Use Fluent radius check
+    checkFluentRadius(node, errors);
+    
     newCheckEffects(
       node,
       errors,
@@ -1578,7 +1589,13 @@ figma.ui.onmessage = msg => {
       localStylesLibrary,
       usedRemoteStyles
     );
-    checkRadius(node, errors, borderRadiusArray);
+    
+    // Use Fluent-specific radius check
+    checkFluentRadius(node, errors);
+    
+    // Check Fluent spacing tokens for auto-layout frames
+    checkFluentSpacing(node, errors, "padding");
+    
     newCheckEffects(
       node,
       errors,

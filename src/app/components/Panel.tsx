@@ -1,6 +1,7 @@
 import * as React from "react";
 import { motion } from "framer-motion/dist/framer-motion";
 
+import AISuggestButton from "./AISuggestButton";
 import ErrorList from "./ErrorList";
 import PanelHeader from "./PanelHeader";
 import Preloader from "./Preloader";
@@ -170,6 +171,10 @@ function Panel(props) {
                   errors={errors}
                   allErrors={filteredErrorArray}
                 />
+                {/* TDS Co-Pilot AI Suggestion Button */}
+                {errors.length > 0 && (
+                  <AISuggestButton error={errors[0]} node={node} />
+                )}
               </React.Fragment>
             ) : (
               <motion.div
